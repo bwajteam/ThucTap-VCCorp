@@ -1,0 +1,11 @@
+﻿PHẦN 1: Basic Python Skills
+1. Document
+	+ https://www.tutorialspoint.com/python/index.htm
+	+ https://www.youtube.com/playlist?list=PLfZeRfzhgQzTMgwFVezQbnpc1ck0I6CQl
+	+ https://learnpythonthehardway.org/book/
+
+2. Bài tập
+	+ Viết chương trình in ra tất cả các số nguyên tố từ 1 đến n(với n nhập vào từ bàn phím)
+	+ Cho một văn bản bất kì, đặt ở file input.txt. Hãy đọc file và đếm số từ xuất hiện của từng từ(mỗi từ phân biệt nhau bằng dấu cách) rồi ghi ra file output.txt
+	+ Viết chương trình sinh ngẫu nhiên 1000 điểm trên mặt phẳng sao cho các điểm không được trùng nhau sau đó lưu kết quả vào file output.txt
+	+ Viết chương trình tính tổng của n phần tử từ 1 -> n sử dụng multithread trong Python (ít nhất 2 luồng)
