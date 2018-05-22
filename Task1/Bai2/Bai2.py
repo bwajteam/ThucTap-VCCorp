@@ -8,7 +8,6 @@ def readFile(name, mode):
     f.close()
     return res
 
-
 # Ghi file
 def writeFile(name, mode, data):
     with open(name, mode) as f:
@@ -20,24 +19,20 @@ def writeFile(name, mode, data):
 
 # Dem tan so cua cac tu
 def countWord(data):
-    count = []
-    label = set(value for value in data)
-    label = sorted(label)
-
-    for labelData in label:
-        countTemp = 0
-        for j in range(len(data)):
-            if(data[j] == labelData):
-                countTemp += 1
-                data[j]= None
-        count.append(countTemp)
-
-    zipped = zip(label, count)
-    return list(zipped)
+    res = {}
+    for x in data:
+        if(x in res.keys()):
+            res[x]+= 1
+        else:
+            res[x] = 1
+    return res
 
 # main
 
 data = readFile("input.txt", "r")
-count = countWord(data)
-writeFile("output.txt", "w", count)
+keys = countWord(data).keys()
+values = countWord(data).values()
+count = zip(keys, values)
+
+writeFile("output.txt", "w", list(count))
 
