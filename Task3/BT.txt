@@ -1,0 +1,8 @@
+2. Bài tập
+	+ Sinh ngẫu nhiên một ma trận 100*100 giá trị các phần tử nằm trong khoảng (0, 100) rồi tìm định thức, ma trận chuyển vị, trị riêng và vector riêng của ma trận. Lưu kết quả vào một file output.txt
+	+ Sử dụng pandas để đọc và in ra thông tin những pokemon có "Speed" lớn hơn 80 và "Attack" lớn hơn 52 trong file pokemon.cvs. Sử dụng matplotlib vẽ một biểu đồ bất kì từ nội dung đã đọc được(show ra màn hình).
+	+ Một ma trận được gọi là "Matrix square" nếu đó là ma trận vuông và tổng các phần tử của các hàng ngang, cột dọc và đường chéo đều bằng nhau. Viết chương trình kiểm tra ma trận đầu vào xem có phải là ma trận "Magic Square"?
+	+ Cho các dữ liệu từ file ZebraBotswana.txt có cấu trúc time(định dạng Unix), vị trí tọa độ (Longtitude, Latitude) tương ứng với time và id ngựa vằn tương ứng. 
+		- Đọc dữ liệu và vẽ bản đồ đường đi của mỗi con ngựa dựa vào thời gian và vị trí. 
+		- Đưa ra hai ngày mà khoảng cách vị trí của nó gần nhau nhất tương ứng với mỗi con ngựa. 
+	+ Sử dụng matplotlib.pyplot.plot vẽ các đồ thị hàm số f(x) = (e^(−x/10))*sin(πx) and g(x) = x*e^(−x/3) trong khoảng [0, 10] trên cùng một biểu đồ. Bao gồm trục x, trục y và các chú thích các đường biểu diễn của từng hàm số. Lưu đồ thì thành một file plot.jpg (“Jpeg”)
