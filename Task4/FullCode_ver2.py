@@ -2,8 +2,8 @@ import MySQLdb as sql
 import datetime
 
 hostname = 'localhost'
-username = 'duyhung'
-password = 'password'
+username = 'root'
+password = '123456'
 database = 'employees'
 
 myConnection = sql.connect( host=hostname, user=username, passwd=password, db=database )
@@ -72,13 +72,12 @@ print("1.4")
 lastName = 'Markovitch'
 firstName = 'Margareta'
 
-querry "\
-SELECT * FROM employees WHERE last_name = '%s' AND first_name = '%s' \
-"
+querry  = "SELECT * FROM employees WHERE last_name = '%s' AND first_name = '%s'" % (lastName, firstName)
+
 cur.execute(query)
 res = cur.fetchall()
 
-if res != null:
+if res != None:
     query = "\
     SELECT * \
     FROM  dept_manager, employees \
@@ -88,12 +87,12 @@ if res != null:
     " % (lastName, firstName)
     try:
     # Thuc thi lenh SQL
-    cur.execute(query)
+        cur.execute(query)
     # Commit cac thay doi vao trong Database
-    myConnection.commit()
+        myConnection.commit()
     except:
     # Rollback trong tinh huong co bat ky error nao
-    myConnection.rollback()
+        myConnection.rollback()
 
     res = cur.fetchall()
     deptNo = res[0][0]
@@ -106,7 +105,6 @@ if res != null:
         AND dept_emp.to_date = '9999-01-01' \
     " %(deptNo)
     cur.execute(query)
-
     res = cur.fetchall()
     print("So nhan vien ma Margareta Markovitch quan ly: %s"%(res[0][0])) 
 # 1.5
@@ -122,9 +120,10 @@ WHERE dept_emp.dept_no = departments.dept_no \
     AND dept_emp.emp_no = salaries.emp_no \
     AND dept_manager.emp_no = salaries.emp_no \
     AND salaries.from_date between '%s' AND '%s' \
-    AND salaries.to_date between '%s' AND '%s'
+    AND salaries.to_date between '%s' AND '%s' \
+    AND dept_manager.emp_no NOT IN dept_emp.emp_no \
 GROUP BY departments.dept_no \
-"
+" % (day1, day2, day1, day2)
 cur.execute(query)
 res = cur.fetchall()
 print("Tổng lương phải trả của mỗi phòng ban trong khoản thời gian from_date = %s và to_date %s" %(day1, day2))
@@ -330,7 +329,7 @@ WHERE to_date > '%s' \
 cur.execute(query)
 res = cur.fetchall()
 
-if res != null:
+if res != None:
     query ="\
     DELIMITER $$\
     DROP PROCEDURE IF EXISTS changeDept $$ \
@@ -363,10 +362,10 @@ if res != null:
     # AND from_date = (SELECT MAX(from_date) FROM titles);\
 
     try:
-    cur.execute(query)
-    myConnection.commit()
+        cur.execute(query)
+        myConnection.commit()
     except:
-    myConnection.rollback()
+        myConnection.rollback()
 
     query = "\
     CALL changeDept('%s', '%s', '%s', '%s');\
