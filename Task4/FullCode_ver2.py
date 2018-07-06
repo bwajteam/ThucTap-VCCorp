@@ -2,8 +2,8 @@ import MySQLdb as sql
 import datetime
 
 hostname = 'localhost'
-username = 'root'
-password = '123456'
+username = 'duyhung'
+password = 'password'
 database = 'employees'
 
 myConnection = sql.connect( host=hostname, user=username, passwd=password, db=database )
@@ -57,8 +57,8 @@ FROM employees, salaries, titles \
 WHERE employees.emp_no = '%d' \
     AND employees.emp_no = salaries.emp_no \
     AND salaries.emp_no = titles.emp_no \
-    AND salaries.from_date > titles.from_date \
-    AND salaries.to_date < titles.to_date \
+    AND salaries.from_date >= titles.from_date \
+    AND salaries.to_date <= titles.to_date \
     AND titles.title = '%s'\
     " %(idEmp, vt)
 
@@ -121,7 +121,10 @@ WHERE dept_emp.dept_no = departments.dept_no \
     AND dept_manager.emp_no = salaries.emp_no \
     AND salaries.from_date between '%s' AND '%s' \
     AND salaries.to_date between '%s' AND '%s' \
-    AND dept_manager.emp_no NOT IN dept_emp.emp_no \
+    AND dept_emp.from_date <= salaries.from_date \
+    AND dept_emp.to_date >= salaries.to_date \
+    AND dept_manager.from_date <= salaries.from_date \
+    AND dept_manager.to_date >= salaries.to_date \
 GROUP BY departments.dept_no \
 " % (day1, day2, day1, day2)
 cur.execute(query)
@@ -178,22 +181,17 @@ q1 = "SELECT dept_no FROM departments WHERE dept_name = '%s'" %(dept)
 cur.execute(q1)
 res = cur.fetchall()
 
-# Xoa toan bo thong tin cua nhan vien trong cac bang lien quan
+# Xoa toan bo thong tin cua nhan vien va quan ly trong cac bang lien quan
 q2 = "\
-DELETE * FROM dept-emp, employees, salariees, titles \
-WHERE dept_emp.dept_no = '%s' \
-AND dept_emp.emp_no = employees.emp_no \
-AND dept_emp.emp_no = salariees.emp_no \
-AND dept_emp.emp_no = titles.emp_no \
-" %(res[0][0])
-
-# # Xoa toan bo thong tin quan ly trong cac bang lien quan
-q3 = "\
-DELETE * FROM dept_manager, employees, salariees, titles \
-WHERE dept_manager.dept_no = '%s' \
-AND dept_manager.emp_no = employees.emp_no \
-AND dept_manager.emp_no = salariees.emp_no \
-AND dept_manager.emp_no = titles.emp_no \
+DELETE a, b, c, d, e \
+FROM dept_emp a, employees b , salaries c , titles d, dept_manager e \
+WHERE a.dept_no = 'd004' \
+AND a.emp_no = b.emp_no \
+AND a.emp_no = c.emp_no \
+AND a.emp_no = d.emp_no \
+AND e.emp_no = b.emp_no \
+AND e.emp_no = c.emp_no \
+AND e.emp_no = d.emp_no \
 " %(res[0][0])
 
 # Xoa bang departments
