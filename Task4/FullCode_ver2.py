@@ -72,7 +72,7 @@ print("1.4")
 lastName = 'Markovitch'
 firstName = 'Margareta'
 
-querry  = "SELECT * FROM employees WHERE last_name = '%s' AND first_name = '%s'" % (lastName, firstName)
+querry  = "SELECT * FROM employees, dept_manager WHERE employees.emp_no = dept_manager.emp_no AND employees.last_name = '%s' AND employees.first_name = '%s'" % (lastName, firstName)
 
 cur.execute(query)
 res = cur.fetchall()
@@ -346,27 +346,37 @@ res = cur.fetchall()
 
 if res != None:
     query ="\
-    DELIMITER $$\
+DELIMITER $$\
     DROP PROCEDURE IF EXISTS changeDept $$ \
     CREATE PROCEDURE changeDept(IN idEmp INT(5), IN idDept varchar(5), IN newTitle varchar (50), IN toDay varchar (20))\
     BEGIN\
-        UPDATE dept_emp\
-        SET dept_no = idDept\
-        WHERE emp_no = idEmp;\
+        IF newTitle != 'Manager' THEN \
+\
+            UPDATE dept_emp\
+            SET to_date = toDay\
+            WHERE emp_no = idEmp\
+            AND to_date = '9999-01-01';\
+\       
+            INSERT INTO dept_emp \
+            VALUES (idEmp, idDept, toDay, '9999-01-01');\
+\            
+            UPDATE titles\
+            SET to_date = toDay\
+            WHERE emp_no = idEmp\
+            AND to_date = '9999-01-01';\
+\    
+            INSERT INTO titles\
+            VALUES (idEmp, newTitle, toDay, '9999-01-01');\
     \
-        UPDATE titles\
-        SET to_date = toDay\
-        WHERE emp_no = idEmp;\
-    \
-        INSERT INTO titles\
-        VALUES (idEmp, newTitle, toDay, '9999-01-01');\
-    \
-        SELECT employees.emp_no, employees.first_name, employees.last_name, employees.gender, titles.title, departments.dept_name\
+            SELECT employees.emp_no, employees.first_name, employees.last_name, employees.gender, titles.title, departments.dept_name, dept_emp.from_date, dept_emp.to_date, titles.from_date, titles.to_date\
             FROM employees, departments, dept_emp, titles\
             WHERE employees.emp_no = dept_emp.emp_no\
             AND employees.emp_no = titles.emp_no\
             AND dept_emp.dept_no = departments.dept_no\
-            AND employees.emp_no = idEmp;\
+            AND employees.emp_no = idEmp\
+            AND titles.from_date < dept_emp.to_date\
+            AND titles.to_date > dept_emp.from_date;\
+        END IF ;\
     END; $$\
     DELIMITER ;\
     "
