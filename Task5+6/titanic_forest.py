@@ -50,27 +50,30 @@ max_depth = 10
 # So luong mau toi thieu de tach mot node
 min_samples_split = 5
 
-#  HUAN LUYEN CO XU LY overfit
-my_tree = tree.DecisionTreeClassifier(max_depth = max_depth, min_samples_split = min_samples_split, random_state = 2)
-my_tree = my_tree.fit(features, target)
-print( my_tree.score(features, target))
+# HUAN LUYEN RANDOM FOREST
+target = train["Survived"].values
+features_forest = train[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
+# n_estimators : is the number of trees to be used in the forest
+n_estimators = 100
+forest = RandomForestClassifier(max_depth=max_depth, min_samples_split=min_samples_split, n_estimators=n_estimators, random_state=2)
+my_forest = forest.fit(features_forest, target)
+print(my_forest.score(features_forest, target))
 
 # LUU CAC DAC DIEM DUNG DE TEST
 test_features = test[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
 
 # THUC HIEN DU DOAN
-tree_prediction = my_tree.predict(test_features)
+forest_prediction = my_forest.predict(test_features)
 
 # XU LI KET QUA
 PassengerId =np.array(test["PassengerId"]).astype(int)
-tree_solution = pd.DataFrame(tree_prediction, PassengerId, columns = ["Survived"])
-
+forest_solution = pd.DataFrame(forest_prediction, PassengerId, columns=["Survived"])
 # print(tree_solution[["Survived"]].values)
 end = datetime.utcnow()
-print("Thoi gian thuc hien ca 2 thuat toan")
+print("Thoi gian thuc hien thuat toan forest")
 print(end - start)
 # LUU TRU KET QUA
-tree_solution.to_csv("tree_solution.csv", index_label = ["PassengerId"])
+forest_solution.to_csv("forest_solution.csv", index_label = ["PassengerId"])
 
 
 
