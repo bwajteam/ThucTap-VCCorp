@@ -54,7 +54,7 @@ min_samples_split = 5
 target = train["Survived"].values
 features_forest = train[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
 # n_estimators : is the number of trees to be used in the forest
-n_estimators = 100
+n_estimators = 30
 forest = RandomForestClassifier(max_depth=max_depth, min_samples_split=min_samples_split, n_estimators=n_estimators, random_state=2)
 my_forest = forest.fit(features_forest, target)
 print(my_forest.score(features_forest, target))
