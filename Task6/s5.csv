@@ -1,0 +1,15 @@
+movieId,agreeCount,avgRating,title,genres,
+7361,10,4.35,Eternal Sunshine of the Spotless Mind (2004),Drama|Romance|Sci-Fi
+7153,13,4.538461538461538,"Lord of the Rings: The Return of the King, The (2003)",Action|Adventure|Drama|Fantasy
+5952,12,4.583333333333333,"Lord of the Rings: The Two Towers, The (2002)",Adventure|Fantasy
+4993,12,4.541666666666667,"Lord of the Rings: The Fellowship of the Ring, The (2001)",Adventure|Fantasy
+4226,12,4.125,Memento (2000),Mystery|Thriller
+3996,10,4.05,"Crouching Tiger, Hidden Dragon (Wo hu cang long) (2000)",Action|Drama|Romance
+2959,12,4.458333333333333,Fight Club (1999),Action|Crime|Drama|Thriller
+2858,11,4.363636363636363,American Beauty (1999),Comedy|Drama
+2571,12,4.208333333333333,"Matrix, The (1999)",Action|Sci-Fi|Thriller
+1198,14,4.178571428571429,Raiders of the Lost Ark (Indiana Jones and the Raiders of the Lost Ark) (1981),Action|Adventure
+1196,13,4.115384615384615,Star Wars: Episode V - The Empire Strikes Back (1980),Action|Adventure|Sci-Fi
+1136,11,4.090909090909091,Monty Python and the Holy Grail (1975),Adventure|Comedy|Fantasy
+858,10,4.25,"Godfather, The (1972)",Crime|Drama
+110,10,4.05,Braveheart (1995),Action|Drama|War
