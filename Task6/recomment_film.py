@@ -10,6 +10,8 @@ ratings_file = "ratings_test.csv"
 min_film_rating_counts_percent = 0.8 #Số bộ fiml đánh giá giống nhau giữa input.csv và rating.csv
 min_user_count_rating_percent = 0.8 #Số lượng người đánh giá tối thiểu
 
+number_of_recomment_films = 5
+
 ratings_data = open(ratings_file, "r").readlines()[1:]
 input_data = open(input_file, "r").readlines()[1:]
 
@@ -97,6 +99,8 @@ s3.close()
 
 s3 = open("s3.csv", "r").readlines()
 counts_dict = {} # key = movieId, item = count ratings
+sum_dict = {} #key = moviedId, item = sum of ratings
+arv_dict = {} #key = moviedId, item = arv of ratings
 
 for ln in s3:
     ln = ln.split(",")
@@ -106,6 +110,26 @@ for ln in s3:
         counts_dict[count1] = 1
     else :
         counts_dict[count1] += 1
+    
+    if count1 not in sum_dict:
+        sum_dict[count1] = float(ln[2].strip())
+    else:
+        sum_dict[count1] += float(ln[2].strip())
+
+# Tính điểm đánh giá trung bình
+
+# for id_movie in counts_dict.keys():
+#     arv_temp = sum_dict[id_movie] / counts_dict[id_movie]
+#     arv_dict[id_movie] = arv_temp
+
+counts_dict_sorted = sorted(counts_dict.items(),key = lambda arv: arv[1], reverse = True)
+
+
+s4 = open("s4.csv", "w")
+for item in counts_dict_sorted:
+    # s4.write(str(item[0]) + "," + str(item[1]) + str(arv_dict[float(item[0])]) + "\n")
+    s4.write(str(item[0]) + "," + str(item[1]) +  "\n")
+s4.close()
 
 # print("Danh sách movies and ratings count")
 # print(counts_dict)
@@ -121,29 +145,54 @@ print("Số user tương đồng tối thiểu: ", min_user_count_rating)
 movies = open("ml-movies.csv", encoding="utf8").readlines()[1:]
 
 
-with open("s4.csv", "w") as f:
-    f.write(','.join(['movieId', 'agreeCount', 'title', 'genres', '\n']))
+with open("s5.csv", "w") as f:
+    f.write(','.join(['movieId', 'title', 'genres', '\n']))
 f.close()
 
+# Lấy ra number_of_recomment_films movies có số rating lớn nhất
+
+count = 0
 for item in counts_dict.items():
-    movie_id = int(item[0])
-    user_count_rating = int(item[1])
-    # print("movieId = ", movie_id)
-    # print("user count rating = ",user_count_rating)
-    if user_count_rating >= min_user_count_rating:
-        for row in movies:
-            row = row.split(",", 1)
-            if int(row[0]) == movie_id:
-                movie_title_genre = row[1]
-                with open("s4.csv", "a") as s4:
-                    s4.write(str(item[0]) + ',' + str(item[1]) + ',' + movie_title_genre)
+    if count < number_of_recomment_films:
+        count += 1
+        movie_id = int(item[0])
+        user_count_rating = int(item[1])
+        # print("movieId = ", movie_id)
+        # print("user count rating = ",user_count_rating)
+        if user_count_rating >= min_user_count_rating:
+            for row in movies:
+                row = row.split(",", 1)
+                if int(row[0]) == movie_id:
+                    movie_title_genre = row[1]
+                    with open("s5.csv", "a") as s5:
+                        s5.write(str(item[0]) + ',' + str(item[1]) + ',' + movie_title_genre)
+s5.close()
 
 
+def check(check_file, output_file):
+    check_input = open(check_file, "r").readlines()
+    recomment_movies = open(output_file, "r").readlines()[1:]
 
+    correct_movies = 0
+    check_movies = []
+    for ln in check_input:
+        ln = ln.split(",")
+        check_movies.append(ln[1])
 
+    for ln in recomment_movies:
+        ln = ln.split(",")
+        if ln[0] in check_movies:
+            correct_movies+= 1
 
+    correct_percent = (correct_movies / len(recomment_movies))*100
 
-    
+    print("Correct movies = " , correct_movies)
+    print("Correct percent = ", correct_percent)
+
+check_file_name = "check.csv"
+out_file_name = "s5.csv"
+
+check(check_file_name, out_file_name)   
 
     
 
