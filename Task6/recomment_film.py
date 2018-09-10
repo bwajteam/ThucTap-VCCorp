@@ -170,7 +170,7 @@ s5.close()
 
 
 def check(check_file, output_file):
-    check_input = open(check_file, "r").readlines()
+    check_input = open(check_file, "r").readlines()[1:]
     recomment_movies = open(output_file, "r").readlines()[1:]
 
     correct_movies = 0
