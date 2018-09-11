@@ -174,7 +174,7 @@ with open("output.csv", "w") as f:
 f.close()
 output_ratings = open("output.csv", "a")
 
-print(','.join(['userId','soUserTuongDong','soBoPhimGoiY','soPhimGoiYDung', 'xacSuat']))
+
 
 
 
@@ -183,32 +183,37 @@ for ln in ratings_data:
     # Lấy ratings_data của từng user. Nếu muốn gợi ý cho user tùy ý, có thể thêm bước check userId ở đây là được.
     if(int(ln_split[0]) == int(userId)):
         input_data_new.append(ln_split)
-index = int(0.5* len(input_data_new))
-# 1/2 data đưa vào train, 1/2 data đưa vào test
-for i in range(0, index):
-    input_data.append(input_data_new[i])
-for i in range(index, len(input_data_new)):
-    check_data.append(input_data_new[i])
+if len(input_data_new) == 0:
+    print("Không tồn tại user\n")
+elif(len(input_data_new) >=2):
+    index = int(0.5* len(input_data_new))
+    # 1/2 data đưa vào train, 1/2 data đưa vào test
+    for i in range(0, index):
+        input_data.append(input_data_new[i])
+    for i in range(index, len(input_data_new)):
+        check_data.append(input_data_new[i])
 
-# Train
-slove(ratings_file_name)
+    # Train
+    slove(ratings_file_name)
 
-# Test
-check(check_data, "s5.csv")
+    # Test
+    check(check_data, "s5.csv")
 
-# Print
-print(output_list_ln)
-output_ratings.write(str(output_list_ln) + "\n")
+    # Print
+    print(','.join(['userId','soUserTuongDong','soBoPhimGoiY','soPhimGoiYDung', 'xacSuat']))
+    print(output_list_ln)
+    output_ratings.write(str(output_list_ln) + "\n")
 
-print("input_data")
-print(input_data)
-print("check_data")
-print(check_data)
+    print("input_data")
+    print(input_data)
+    print("check_data")
+    print(check_data)
 
-f = open("s5.csv", "r").readlines()
-for ln in f:
-    print(ln)       
-        
+    f = open("s5.csv", "r").readlines()
+    for ln in f:
+        print(ln)     
+else: 
+    print("Không đủ data để gợi ý\n")  
         
 output_ratings.close()
     
