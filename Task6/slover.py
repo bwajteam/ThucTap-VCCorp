@@ -156,21 +156,19 @@ def check(check_data, output_file):
         output_list_ln.append(correct_movies) 
         output_list_ln.append(round(correct_percent, 1))
 
-# ---Main--- 
+# ---Main---
 ratings_file_name = "ratings_test.csv"
-ratings_data_first = open(ratings_file_name, "r").readlines()[1:2]
-ratings_data_first_split = ratings_data_first[0].split(",")
-ratings_data = open(ratings_file_name, "r").readlines()[2:]
+ratings_data = open(ratings_file_name, "r").readlines()[1:]
 
 
 input_data_new = [] #Lưu tất cả ratings của từng user, reset khi đến userId mới
-input_data_new.append(ratings_data_first_split)
 input_data = [] #Lưu ratings của user để train
 check_data = [] #Lưu ratings của user để test
 
 
 output_list_ln = [] #Lưu output với format ['userId', 'movies_input_len', 'movies_like_input_min','user_same_rating','user_same_rating_min','correct_movies', 'correct_percent', '\n'
 
+userId = input("Nhap userId: ")
 with open("output.csv", "w") as f:
         f.write(','.join(['userId','soUserTuongDong','soBoPhimGoiY','soPhimGoiYDung', 'xacSuat', '\n']))
 f.close()
@@ -178,38 +176,38 @@ output_ratings = open("output.csv", "a")
 
 print(','.join(['userId','soUserTuongDong','soBoPhimGoiY','soPhimGoiYDung', 'xacSuat']))
 
+
+
 for ln in ratings_data:
     ln_split = ln.split(",")
     # Lấy ratings_data của từng user. Nếu muốn gợi ý cho user tùy ý, có thể thêm bước check userId ở đây là được.
-    if(ln_split[0] == ratings_data_first_split[0]):
+    if(int(ln_split[0]) == int(userId)):
         input_data_new.append(ln_split)
-        
-    else:
-        ratings_data_first = ln
-        ratings_data_first_split = ratings_data_first.split(",")
-        index = int(0.5* len(input_data_new))
-        # 1/2 data đưa vào train, 1/2 data đưa vào test
-        for i in range(0, index):
-            input_data.append(input_data_new[i])
-        for i in range(index, len(input_data_new)):
-            check_data.append(input_data_new[i])
+index = int(0.5* len(input_data_new))
+# 1/2 data đưa vào train, 1/2 data đưa vào test
+for i in range(0, index):
+    input_data.append(input_data_new[i])
+for i in range(index, len(input_data_new)):
+    check_data.append(input_data_new[i])
 
-        # Train
-        slove(ratings_file_name)
+# Train
+slove(ratings_file_name)
 
-        # Test
-        check(check_data, "s5.csv")
+# Test
+check(check_data, "s5.csv")
 
-        # Print
-        print(output_list_ln)
-        output_ratings.write(str(output_list_ln) + "\n")
+# Print
+print(output_list_ln)
+output_ratings.write(str(output_list_ln) + "\n")
 
-        # Reset lại giá trị cho userId mới.
-        input_data_new = []
-        input_data_new.append(ratings_data_first_split)
-        input_data = []
-        check_data = []
-        output_list_ln = []
+print("input_data")
+print(input_data)
+print("check_data")
+print(check_data)
+
+f = open("s5.csv", "r").readlines()
+for ln in f:
+    print(ln)       
         
         
 output_ratings.close()
